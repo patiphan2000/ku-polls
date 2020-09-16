@@ -10,3 +10,9 @@
     {% endfor %}
 <input type="submit" value="Vote">
 </form>
+<br>
+<button><a href="{% url 'polls:results' question.id %}"">results</a></button>
+</br>
+<br>
+<button><a href="{% url 'polls:index' %}"">Back to polls index</a></button>
+</br>
