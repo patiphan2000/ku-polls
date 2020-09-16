@@ -36,6 +36,54 @@ class QuestionModelTests(TestCase):
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
 
+    def test_is_published_with_future_question(self):
+        """
+        is_published() return False for questions whose pub_date
+        is in the future.
+        """
+        time = timezone.now() + datetime.timedelta(days=30)
+        future_question = Question(pub_date=time)
+        self.assertIs(future_question.is_published(), False)
+    
+    def test_is_publish_with_one_year_question(self):
+        """
+        is_published() return True for questions whose pub_date
+        is older than current time no matter how old it is.
+        """
+        time = timezone.now() - datetime.timedelta(days=365)
+        very_old_question = Question(pub_date=time)
+        self.assertIs(very_old_question.is_published(), True)
+
+    def test_can_vote_with_future_question(self):
+        """
+        can_vote() return False for questions whose pub_date
+        is in the future.
+        """
+        time = timezone.now() + datetime.timedelta(days=30)
+        future_question = Question(pub_date=time)
+        self.assertIs(future_question.can_vote(), False)
+
+    def test_can_vote_with_closed_question(self):
+        """
+        can_vote() return False for questions whose end_date
+        is already pass.
+        """
+        pub_date_time = timezone.now() - datetime.timedelta(days=7)
+        end_date_time = timezone.now() - datetime.timedelta(days=1)
+        closed_question = Question(pub_date = pub_date_time, end_date=end_date_time)
+        self.assertIs(closed_question.can_vote(), False)
+
+    def test_can_vote_with_open_question(self):
+        """
+        can_vote() return True for questions whose still open.
+        pub_date is in the past and end_date is in the future.
+        """
+        pub_date_time = timezone.now() - datetime.timedelta(days=1)
+        end_date_time = timezone.now() + datetime.timedelta(days=1)
+        open_question = Question(pub_date=pub_date_time, end_date=end_date_time)
+        self.assertIs(open_question.can_vote(), True)
+
+
 def create_question(question_text, days):
     """
     Create a question with the given `question_text` and published the
@@ -54,7 +102,7 @@ class QuestionIndexViewTests(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No polls are available.")
-        self.assertQuerysetEqual(response.context['latest_question_list'], [])
+        self.assertQuerysetEqual(response.context['lastest_question_list'], [])
 
     def test_past_question(self):
         """
@@ -64,7 +112,7 @@ class QuestionIndexViewTests(TestCase):
         create_question(question_text="Past question.", days=-30)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
-            response.context['latest_question_list'],
+            response.context['lastest_question_list'],
             ['<Question: Past question.>']
         )
 
@@ -76,7 +124,7 @@ class QuestionIndexViewTests(TestCase):
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
         self.assertContains(response, "No polls are available.")
-        self.assertQuerysetEqual(response.context['latest_question_list'], [])
+        self.assertQuerysetEqual(response.context['lastest_question_list'], [])
 
     def test_future_question_and_past_question(self):
         """
@@ -87,7 +135,7 @@ class QuestionIndexViewTests(TestCase):
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
-            response.context['latest_question_list'],
+            response.context['lastest_question_list'],
             ['<Question: Past question.>']
         )
 
@@ -99,7 +147,7 @@ class QuestionIndexViewTests(TestCase):
         create_question(question_text="Past question 2.", days=-5)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
-            response.context['latest_question_list'],
+            response.context['lastest_question_list'],
             ['<Question: Past question 2.>', '<Question: Past question 1.>']
         )
 
