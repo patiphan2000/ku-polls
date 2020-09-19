@@ -27,10 +27,10 @@ class DetailView(generic.DetailView):
             if (question.can_vote()):
                 return HttpResponseRedirect('vote')
             else:
-                messages.error(request, "You're not allows to vote that question")
+                messages.error(request, "You're not allows to vote that question.")
                 return HttpResponseRedirect(reverse('polls:index'))
         except:
-            messages.error(request, "Question doesn't exist")
+            messages.error(request, "Question doesn't exist.")
             return HttpResponseRedirect(reverse('polls:index'))
 
 
@@ -58,4 +58,5 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
+        messages.success(request, "Your choice successfully recorded.")
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
