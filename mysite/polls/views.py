@@ -27,8 +27,10 @@ class DetailView(generic.DetailView):
             if (question.can_vote()):
                 return HttpResponseRedirect('vote')
             else:
+                messages.error(request, "You're not allows to vote that question")
                 return HttpResponseRedirect(reverse('polls:index'))
         except:
+            messages.error(request, "Question doesn't exist")
             return HttpResponseRedirect(reverse('polls:index'))
 
 
