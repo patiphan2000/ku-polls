@@ -1,10 +1,27 @@
 <h1>{{ question.question_text }}</h1>
 
-<ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
+<style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 15px;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>Choices</th>
+        <th>Votes</th>
+    </tr>
+    {% for choice in question.choice_set.all %}
+    <tr>
+        <td>{{ choice.choice_text }}</td>
+        <td>{{ choice.votes }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% if question.can_vote %}
 <button>
@@ -13,6 +30,7 @@
     </a>
 </button>
 {% endif %}
+
 <br>
 <button><a href="{% url 'polls:index' %}"">Back to polls index</a></button>
 </br>
