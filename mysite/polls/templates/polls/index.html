@@ -8,11 +8,13 @@
             <li>
                 <b>{{ question.question_text }}</b>
                 {% if question.can_vote %}
-                <br>
-                    <a href="{% url 'polls:detail' question.id %}">vote</a>
+                <br><a href="{% url 'polls:detail' question.id %}">vote</a>
                 </br>
-                {% endif %}
                 <a href="{% url 'polls:results' question.id %}">vote result</a>
+                {% else %}
+                <br><a href="{% url 'polls:results' question.id %}">vote result</a>
+                <br>
+                {% endif %}
             </li>
             {% endfor %}
     </ul>

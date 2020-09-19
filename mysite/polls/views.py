@@ -1,8 +1,9 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
 
 from .models import Choice, Question
 
@@ -19,7 +20,18 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
-    
+
+    def get(self, request, *args, **kwargs):
+        try:
+            question = Question.objects.get(pk=kwargs['pk'])
+            if (question.can_vote()):
+                return HttpResponseRedirect('vote')
+            else:
+                return HttpResponseRedirect(reverse('polls:index'))
+        except:
+            return HttpResponseRedirect(reverse('polls:index'))
+
+
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
