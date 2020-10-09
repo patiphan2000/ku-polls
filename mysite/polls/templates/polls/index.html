@@ -2,8 +2,9 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 
-<h1>KU-Polls</h1>
+<div class="box-head"><h1>KU-Polls</h1></div>
 
+<div class="box-container">
 {% if messages %}
 <ul class="messages">
   {% for msg in messages %}
@@ -13,23 +14,31 @@
 {% endif %}
 
 {% if lastest_question_list %}
-    <ul>
+        <body>
         {% for question in lastest_question_list %}
-            <li>
-                <b>{{ question.question_text }}</b>
                 {% if question.can_vote %}
-                <br><a href="{% url 'polls:detail' question.id %}">vote</a>
-                </br>
-                <a href="{% url 'polls:results' question.id %}">vote result</a>
+                <div class="box-question">
+                    <b>{{ question.question_text }}</b>
+                    <a href="{% url 'polls:detail' question.id %}">vote</a>
+                    <br><a href="{% url 'polls:results' question.id %}">vote result</a>
+                    <br>
+                    </div>
                 {% else %}
-                <br><a href="{% url 'polls:results' question.id %}">vote result</a>
-                <br>
+                    <div class="box-question">
+                    <b>{{ question.question_text }}</b>
+                    <br><a href="{% url 'polls:results' question.id %}">vote result</a>
+                    <br>
+                    </div>
                 {% endif %}
-            </li>
-            {% endfor %}
-    </ul>
+        {% endfor %}
+        </body>
 {% else %}
     <p>
         No polls are available.
     </p>
 {% endif %}
+</div>
+
+<script>
+
+</script>

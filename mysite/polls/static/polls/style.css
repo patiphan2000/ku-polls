@@ -4,3 +4,38 @@ li a {
 body {
     background: white url("images/background.gif") no-repeat;
 }
+
+.box-head {
+    position: sticky;
+    background-color: lightblue;
+    z-index: 10;
+    height: 100px;
+    width: 99%;
+    left: 0px;
+    top: 0px;
+    padding: 8px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.box-container {
+    position: absolute;
+    background-color: beige;
+    z-index: 0;
+    height: 100%;
+    width: 70%;
+    left: 15%;
+    /* top: 100px; */
+}
+
+.box-question {
+    position: relative;
+    background-color: cornsilk;
+    z-index: 1;
+    height: 80px;
+    width: 30%;
+    text-align: left;
+    padding: 10px;
+    top: 10px;
+    
+}

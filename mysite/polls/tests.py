@@ -8,7 +8,10 @@ from .models import Question
 
 
 class QuestionModelTests(TestCase):
-    
+    """
+    Test for Question model.
+    """
+
     def test_was_published_recently_with_future_question(self):
         """
         was_published_recently() returns False for questions whose pub_date
@@ -17,7 +20,7 @@ class QuestionModelTests(TestCase):
         time = timezone.now() + datetime.timedelta(days=30)
         future_question = Question(pub_date=time)
         self.assertIs(future_question.was_published_recently(), False)
-    
+
     def test_was_published_recently_with_old_question(self):
         """
         was_published_recently() returns False for questions whose pub_date
@@ -44,7 +47,7 @@ class QuestionModelTests(TestCase):
         time = timezone.now() + datetime.timedelta(days=30)
         future_question = Question(pub_date=time)
         self.assertIs(future_question.is_published(), False)
-    
+
     def test_is_publish_with_one_year_question(self):
         """
         is_published() return True for questions whose pub_date
@@ -70,7 +73,7 @@ class QuestionModelTests(TestCase):
         """
         pub_date_time = timezone.now() - datetime.timedelta(days=7)
         end_date_time = timezone.now() - datetime.timedelta(days=1)
-        closed_question = Question(pub_date = pub_date_time, end_date=end_date_time)
+        closed_question = Question(pub_date=pub_date_time, end_date=end_date_time)
         self.assertIs(closed_question.can_vote(), False)
 
     def test_can_vote_with_open_question(self):
@@ -95,6 +98,10 @@ def create_question(question_text, days):
 
 
 class QuestionIndexViewTests(TestCase):
+    """
+    Test for Question index view.
+    """
+
     def test_no_questions(self):
         """
         If no questions exist, an appropriate message is displayed.
@@ -151,7 +158,12 @@ class QuestionIndexViewTests(TestCase):
             ['<Question: Past question 2.>', '<Question: Past question 1.>']
         )
 
+
 class QuestionDetailViewTests(TestCase):
+    """
+    Test for Question detail view.
+    """
+
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future

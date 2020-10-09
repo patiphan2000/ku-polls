@@ -60,3 +60,6 @@ def vote(request, question_id):
         selected_choice.save()
         messages.success(request, "Your choice successfully recorded.")
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def go_to_index(request):
+    return IndexView.as_view()
