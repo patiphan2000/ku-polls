@@ -16,4 +16,4 @@ script:
   - coverage run -m unittest discover -p "/mysite/polls/tests.py"
 
 after_script:
-  - bash <(curl -s https://codecov.io/bash) -t a12e66d7-11fa-4e73-b4c7-a838138ea6e3
+  - bash <(curl -s https://codecov.io/bash)
