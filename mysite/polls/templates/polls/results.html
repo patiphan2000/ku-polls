@@ -1,44 +1,40 @@
-<h1>{{ question.question_text }}</h1>
+{% extends "polls/base.html" %}
 
-<style>
-    table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 10px;
-    }
-</style>
+{% block title %}
+  <h1>{{ question.question_text }}</h1>
+{% endblock %}
 
-{% if messages %}
-<ul class="messages">
-  {% for msg in messages %}
-    <li class="{{msg.tags}}">{{ msg }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
-
-<table>
-    <tr>
-        <th>Choices</th>
-        <th>Votes</th>
-    </tr>
-    {% for choice in question.choice_set.all %}
-    <tr>
-        <td>{{ choice.choice_text }}</td>
-        <td>{{ choice.votes }}</td>
-    </tr>
+{% block content %}
+  {% if messages %}
+  <ul class="messages">
+    {% for msg in messages %}
+      <li class="{{msg.tags}}">{{ msg }}</li>
     {% endfor %}
-</table>
+  </ul>
+  {% endif %}
 
-{% if question.can_vote %}
-<button>
-    <a href="{% url 'polls:detail' question.id %}">
-        Vote again
-    </a>
-</button>
-{% endif %}
+  <table>
+      <tr>
+          <th>Choices</th>
+          <th>Votes</th>
+      </tr>
+      {% for choice in question.choice_set.all %}
+      <tr>
+          <td>{{ choice.choice_text }}</td>
+          <td>{{ choice.votes }}</td>
+      </tr>
+      {% endfor %}
+  </table>
 
-<br>
-<button><a href="{% url 'polls:index' %}"">Back to polls index</a></button>
-</br>
+  {% if question.can_vote %}
+  <button style="margin-top: 10px;margin-bottom: 10px;">
+      <a href="{% url 'polls:detail' question.id %}">
+          Vote again
+      </a>
+  </button>
+  {% endif %}
+
+  <br>
+  <button style="margin-top: 10px;"><a href="{% url 'polls:index' %}"">Back to polls index</a></button>
+  </br>
+{% endblock %}

@@ -1,44 +1,25 @@
-{% load static %}
+{% extends  "polls/base.html" %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% block title %}
+  <h1>Polls</h1>
+{% endblock %}
 
-<div class="box-head"><h1>KU-Polls</h1></div>
-
-<div class="box-container">
-{% if messages %}
-<ul class="messages">
-  {% for msg in messages %}
-    <li class="{{msg.tags}}">{{ msg }}</li>
+{% block content %}
+  {% for question in lastest_question_list %}
+    <div class="hoverable" style="padding-bottom: 20px;">
+      <div class="container rounded" style="border:1px solid black;width: 90%;">
+        <h3>{{ question.question_text }}
+        {% if question.can_vote %}
+          <br><a href="{% url 'polls:detail' question.id %}" style="font-size: 15px;">vote</a>
+        {% endif %}
+        <br><a href="{% url 'polls:results' question.id %}" style="font-size: 15px;">vote result</a>
+        </h3>
+        <div class="border-top pt-3">
+          <small class="text-muted">
+            poll will end on: {{ question.end_date }}
+          </small>
+        </div>
+      </div>
+    </div>
   {% endfor %}
-</ul>
-{% endif %}
-
-{% if lastest_question_list %}
-        <body>
-        {% for question in lastest_question_list %}
-                {% if question.can_vote %}
-                <div class="box-question">
-                    <b>{{ question.question_text }}</b>
-                    <a href="{% url 'polls:detail' question.id %}">vote</a>
-                    <br><a href="{% url 'polls:results' question.id %}">vote result</a>
-                    <br>
-                    </div>
-                {% else %}
-                    <div class="box-question">
-                    <b>{{ question.question_text }}</b>
-                    <br><a href="{% url 'polls:results' question.id %}">vote result</a>
-                    <br>
-                    </div>
-                {% endif %}
-        {% endfor %}
-        </body>
-{% else %}
-    <p>
-        No polls are available.
-    </p>
-{% endif %}
-</div>
-
-<script>
-
-</script>
+{% endblock %}
