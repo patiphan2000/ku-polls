@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 class Question(models.Model):
     question_text = models.CharField(max_length = 200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', default=timezone.now())
     end_date = models.DateTimeField(default = timezone.now() + datetime.timedelta(days = 1))
 
     def __str__(self):
@@ -38,5 +38,6 @@ class Choice(models.Model):
         return self.choice_text
 
 class Vote(models.Model): 
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, default=1)
     choice = models.ForeignKey(Choice,on_delete=models.CASCADE)
     voter = models.ForeignKey(User,on_delete=models.CASCADE)

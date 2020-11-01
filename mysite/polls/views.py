@@ -57,15 +57,23 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        if Vote.objects.filter(choice=selected_choice, voter=request.user):
-            messages.error(request,"Already Voted on this choice")
+        if Vote.objects.filter(question=question, voter=request.user):
+            vote = Vote.objects.get(question=question, voter=request.user)
+            if selected_choice == vote.choice:
+                return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+            vote.choice.votes -= 1
+            vote.choice.save()
+            vote.choice = selected_choice
+            vote.save()
+            selected_choice.votes += 1
+            selected_choice.save()
             return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
         else:
             selected_choice.votes += 1
             selected_choice.save()
-            Vote.objects.create(choice=selected_choice, voter=request.user)
-            messages.success(request, "Your choice successfully recorded.")
-            return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+            Vote.objects.create(question=question, choice=selected_choice, voter=request.user)
+        messages.success(request, "Your choice successfully recorded.")
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 def go_to_index(request):
     return IndexView.as_view()
