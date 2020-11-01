@@ -15,5 +15,5 @@ install:
 script: 
   - coverage run -m unittest discover -p "/mysite/polls/tests/*"
 
-after_script:
+after_success:
   - bash <(curl -s https://codecov.io/bash)
