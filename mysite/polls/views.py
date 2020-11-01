@@ -2,11 +2,12 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+ 
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .models import Choice, Question
+from .models import Choice, Question, Vote
 
 
 class IndexView(generic.ListView):
@@ -56,10 +57,15 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        messages.success(request, "Your choice successfully recorded.")
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        if Vote.objects.filter(choice=selected_choice, voter=request.user):
+            messages.error(request,"Already Voted on this choice")
+            return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        else:
+            selected_choice.votes += 1
+            selected_choice.save()
+            Vote.objects.create(choice=selected_choice, voter=request.user)
+            messages.success(request, "Your choice successfully recorded.")
+            return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 def go_to_index(request):
     return IndexView.as_view()
