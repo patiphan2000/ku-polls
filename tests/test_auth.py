@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 
-from ..models import Question
+from polls.models import Question
 
 class AuthTest(TestCase):
     def test_login_with_not_exist_account(self):

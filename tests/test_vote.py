@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 
-from ..models import Question
+from polls.models import Question
 
 class VoteTest(TestCase):
     def test_vote_before_login(self):
